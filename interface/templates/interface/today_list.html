@@ -1,0 +1,47 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Item List</title>
+    <link rel="stylesheet" href="{% static 'interface/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <!-- Heading -->
+        <h1 class="page-title">Filter Items</h1>
+
+        <!-- Filter form -->
+        <form method="get" class="filter-form">
+            {{ form.as_p }}
+            <button type="submit" class="btn-filter">Filter</button>
+        </form>
+
+        <!-- Section Title -->
+        <h2 class="section-title">Today's Items</h2>
+
+        <!-- Items List -->
+        <ul class="items-list">
+            {% for item in items %}
+            <li class="item">
+                <form action="" method="post" class="item-form">
+                    {% csrf_token %}
+                    <div class="item-content">
+                        <!-- Item Title -->
+                        <a href="" class="item-title">{{ item.title }}</a>
+                        <!-- Item Details -->
+                        <span class="item-content">{{ item.content }}</span>
+
+                        
+                        <a href="{{ item.link }}" class="item-link">{{ item.link }}</a>
+                    </div>
+
+                    <!-- Done Button -->
+                    <button name="done" value="{{item.id}}" class="btn-done">Done</button>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

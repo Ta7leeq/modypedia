@@ -1,0 +1,36 @@
+{%load static%}
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Item List</title>
+    <link rel="stylesheet" href="{% static 'interface/style.css' %}">
+
+</head>
+<body>
+    <h1>Filter Items</h1>
+    <form method="get">
+        {{ form.as_p }}
+        <button type="submit">Filter</button>
+    </form>
+    <h2>Items</h2>
+    <ul>
+        {% for item in items %}
+            <li>
+                <a href="">{{ item.title }}</a>
+                - {{ item.item_type }}
+                - {{ item.author }}
+                - {{ item.date_created }}
+                - {{ item.tags }}
+                - <a href="{{ item.link }}">{{ item.link }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+
+
+
+
+    
