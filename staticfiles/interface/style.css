@@ -152,7 +152,6 @@ body {
 
 /* Done Button */
 .btn-done {
-    margin: 5px;
     background-color: #28a745;
     color: white;
     border: none;
@@ -167,33 +166,6 @@ body {
     background-color: #218838;
 }
 
-.btn-delete {
-    margin: 5px;
-    background-color: #f44336; /* Red for caution */
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.btn-delete:hover {
-    background-color: #d32f2f; /* Darker red on hover */
-}
-
-/* Reset Button Style */
-.btn-reset {
-    margin: 5px;
-    background-color: #FFA500; /* Orange */
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-}
-
-.btn-reset:hover {
-    background-color: #FF8C00; /* Darker orange on hover */
-}
 /* Responsive Design */
 @media (max-width: 600px) {
     .filter-form {

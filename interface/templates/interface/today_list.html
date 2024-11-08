@@ -1,11 +1,15 @@
+{% extends "base.html" %}
 {% load static %}
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Item List</title>
-    <link rel="stylesheet" href="{% static 'interface/style.css' %}">
-</head>
+{%block css_files%}
+<link rel="stylesheet" href="{% static 'interface/style.css' %}">
+{%endblock%}
+
+{%block page_title%}
+Todays Items!
+{%endblock%}
+
+{% block content %}
 <body>
     <div class="container">
         <!-- Heading -->
@@ -36,12 +40,27 @@
                         <a href="{{ item.link }}" class="item-link">{{ item.link }}</a>
                     </div>
 
-                    <!-- Done Button -->
+                    <!-- action Button -->
                     <button name="done" value="{{item.id}}" class="btn-done">Done</button>
+                    <button name="reset" value="{{item.id}}" class="btn-reset">reset</button>
+                    <button name="delete" value="{{item.id}}" class="btn-delete"  onclick="return confirmDelete();">delete</button>
+                    
                 </form>
             </li>
             {% endfor %}
         </ul>
     </div>
 </body>
-</html>
+
+<!-- JavaScript for Confirmation Prompt -->
+<script>
+    function confirmDelete() {
+        return confirm("Are you sure you want to delete this item?");
+    }
+</script>
+
+{%endblock%}
+
+
+
+

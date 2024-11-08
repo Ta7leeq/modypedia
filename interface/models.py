@@ -11,6 +11,22 @@ class Fach(models.Model):
 
 #from django.contrib.postgres.fields import JSONField
 
+class Author(models.Model):
+    author_name = models.CharField(max_length=50, unique=True, null=True,blank=True)
+
+    def __str__(self):
+        return self.author_name
+
+class Platform(models.Model):
+    platform_name = models.CharField(max_length=50, unique=True, null=True,blank=True)
+
+    def __str__(self):
+        return self.platform_name
+    
+
+
+
+    
 class Domain(models.Model):
     domain_name = models.CharField(max_length=50, unique=True)
 
@@ -162,9 +178,14 @@ class Item(models.Model):
     item_type = models.CharField(max_length=50, choices=ITEM_TYPES)
     title = models.CharField(max_length=255)
     content = models.TextField(blank=True, null=True)
-    author = models.CharField(max_length=255, blank=True, null=True)
+    author = models.CharField(max_length=255, blank=True, null=True,default="Mody")
+    fPlatform = models.ForeignKey(Platform, on_delete=models.CASCADE, blank=True, null=True)
+    
     platform = models.CharField(max_length=255, blank=True, null=True)
     date_created = models.DateField(auto_now_add=True)
+    
+    
+
     domain = models.ForeignKey(Domain, on_delete=models.CASCADE, blank=True, null=True)
     field = models.ForeignKey(Field, on_delete=models.CASCADE, blank=True, null=True)
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE, blank=True, null=True) 

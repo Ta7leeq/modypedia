@@ -2,7 +2,7 @@
 from django.shortcuts import render, redirect
 from .models import Item
 from .forms import ItemFilterForm
-from datetime import date, timedelta
+from datetime import date, timedelta,datetime
 from django.forms.models import model_to_dict
 
 def item_list(request):
@@ -29,15 +29,28 @@ def item_list(request):
 
 def memory(request):
     if request.method == 'POST':
-        print("post")
-        post_id=request.POST.get('done')
-        done_item = Item.objects.get(id=post_id)
         
+        if 'delete' in request.POST:
+            post_id=request.POST.get('delete')
+            delete_item = Item.objects.get(id=post_id)
+            delete_item.delete()
         
-        done_item.next_time=calculate_next_time(done_item.last_time,done_item.next_time)
-        done_item.save()
-        return redirect('memory')
+        elif 'reset' in request.POST:
+            post_id=request.POST.get('reset')
+            reset_item = Item.objects.get(id=post_id)
+            reset_item.next_time=reset_date().date()
+            reset_item.save()
+            return redirect('memory')
         
+        elif 'done' in request.POST:
+            post_id=request.POST.get('done')
+            done_item = Item.objects.get(id=post_id)
+            
+            
+            done_item.next_time=calculate_next_time(done_item.last_time,done_item.next_time)
+            done_item.save()
+            return redirect('memory')
+            
     
 
         
@@ -90,4 +103,8 @@ def calculate_next_time(last_time, next_time):
     # Calculate the next review time by adding the interval in days
     next_time = last_time + timedelta(days=next_interval)
 
+    return next_time
+
+def reset_date():
+    next_time=datetime.now()+timedelta(days=1)
     return next_time
