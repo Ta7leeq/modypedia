@@ -1,7 +1,18 @@
+{% extends "base.html" %}
 {%load static%}
 
+{%block css_files%}
+    <link rel="stylesheet" href ="{%static "interface/style.css" %}"-->
+{%endblock%}
 
-<html lang="en">
+
+{%block page_title%}
+All Items!
+{%endblock%}
+
+
+
+{% block content %}
 <head>
     <meta charset="UTF-8">
     <title>Item List</title>
@@ -29,7 +40,7 @@
     </ul>
 </body>
 </html>
-
+{%endblock%}
 
 
 

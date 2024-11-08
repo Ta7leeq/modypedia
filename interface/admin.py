@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Item, Tag, ItemTag, Relationship,Domain,Field,Branch,Area,Topic,Section,Aspect
+from .models import Item, Tag, ItemTag, Relationship,Domain,Field,Branch,Area,Topic,Section,Aspect,Platform
 
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
@@ -8,13 +8,21 @@ class ItemAdmin(admin.ModelAdmin):
     list_filter = ('item_type', 'date_created')
     fieldsets = (
         (None, {
-            'fields': ('item_type', 'title', 'content', 'author','platform','domain','field','branch','area','topic','section','aspect','tags','link','last_time','next_time')
+            'fields': ('item_type', 'title', 'content', 'author','fPlatform','domain','field','branch','area','topic','section','aspect','tags','link','last_time','next_time')
         }),
         ('Dates', {
             'fields': ('date_created',),
         }),
     )
     readonly_fields = ('date_created',)
+
+
+
+@admin.register(Platform)
+class PlatformAdmin(admin.ModelAdmin):
+    list_display = ('platform_name',)
+    search_fields = ('platform_name',)
+
 
 @admin.register(Domain)
 class DomainAdmin(admin.ModelAdmin):
