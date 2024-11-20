@@ -1,9 +1,14 @@
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,HttpResponse,get_object_or_404
 from .models import Item
 from .forms import ItemFilterForm
 from datetime import date, timedelta,datetime
 from django.forms.models import model_to_dict
+from google.cloud import texttospeech
+from django.core.files.storage import default_storage
+from django.http import JsonResponse
+import os
+from google.cloud import texttospeech
 
 def item_list(request):
     form = ItemFilterForm(request.GET)
@@ -26,6 +31,55 @@ def item_list(request):
                 items = items.filter(tags__icontains=tag.strip())
 
     return render(request, 'interface/item_list.html', {'form': form, 'items': items})
+
+
+
+def details(request,item_id):
+    
+    item = get_object_or_404(Item, id=item_id)
+    if request.method=='POST':
+        
+        if 'delete' in request.POST:
+            print("delete")
+            post_id=request.POST.get('delete')
+            delete_item = Item.objects.get(id=post_id)
+            delete_item.delete()
+        
+        elif 'reset' in request.POST:
+            post_id=request.POST.get('reset')
+            reset_item = Item.objects.get(id=post_id)
+            reset_item.next_time=reset_date().date()
+            reset_item.save()
+            return redirect('memory')
+        
+        elif 'done' in request.POST:
+            post_id=request.POST.get('done')
+            done_item = Item.objects.get(id=post_id)
+            
+            
+            done_item.next_time=calculate_next_time(done_item.last_time,done_item.next_time)
+            done_item.save()
+            return redirect('memory')
+        
+        elif 'play' in request.POST:
+        
+            # Synthesize speech
+            client = texttospeech.TextToSpeechClient()
+            synthesis_input = texttospeech.SynthesisInput(text=item.content)
+            voice = texttospeech.VoiceSelectionParams(
+                language_code="en-AU", ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL
+            )
+            audio_config = texttospeech.AudioConfig(audio_encoding=texttospeech.AudioEncoding.MP3)
+            response = client.synthesize_speech(
+                input=synthesis_input,
+                voice=voice,
+                audio_config=audio_config
+            )
+
+            # Stream the audio content as a response
+            return HttpResponse(response.audio_content, content_type='audio/mpeg')
+            
+    return render(request, 'interface/details.html', {'item': item})
 
 def memory(request):
     if request.method == 'POST':

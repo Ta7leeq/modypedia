@@ -32,7 +32,8 @@ Todays Items!
                     {% csrf_token %}
                     <div class="item-content">
                         <!-- Item Title -->
-                        <a href="" class="item-title">{{ item.title }}</a>
+                        <a href="{% url 'details' item.id %}" class="item-title">{{ item.title }}</a>
+
                         <!-- Item Details -->
                         <span class="item-content">{{ item.content }}</span>
 
