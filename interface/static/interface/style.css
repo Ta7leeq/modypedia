@@ -9,7 +9,7 @@ body {
 
 /* Container */
 .container {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
     background-color: #fff;
@@ -107,17 +107,18 @@ body {
 
 /* Item Form */
 .item-form {
-    display: flex;
-    justify-content: space-between;
+    
     align-items: center;
 }
 
 /* Item Content */
 .item-content {
+    visibility: hidden;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     gap: 8px;
+    
 }
 
 /* Item Title */
@@ -167,6 +168,66 @@ body {
     background-color: #218838;
 }
 
+.btn-show-content {
+    margin: 10px 0;
+    background-color: #007bff; /* Bright blue */
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+/* Hide Button */
+.btn-hide20 {
+    margin: 5px;
+    background-color: #e9f0cc;
+    color: #28a745;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-hide20:hover {
+    background-color: #218838;
+}
+
+/* Hide Button */
+.btn-hide360 {
+    margin: 5px;
+    background-color: #b9b5b1;
+    color: #ee1111;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-hide360:hover {
+    background-color: #218838;
+}
+.btn-archive {
+    margin: 5px;
+    background-color: #c240ac; /* Red for caution */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-archive:hover {
+    background-color: #d3d02f; /* Darker red on hover */
+}
+
 .btn-delete {
     margin: 5px;
     background-color: #f44336; /* Red for caution */
@@ -209,4 +270,46 @@ body {
         margin-top: 10px;
         align-self: center;
     }
+}
+
+/* Postpone Section */
+.postpone-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 5px 0;
+}
+
+/* Postpone Dropdown */
+.postpone-dropdown {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: #fff;
+    color: #333;
+    transition: border-color 0.3s ease;
+}
+
+.postpone-dropdown:hover,
+.postpone-dropdown:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Postpone Button */
+.btn-postpone {
+    background-color: #007bff; /* Blue for postponing */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-postpone:hover {
+    background-color: #0056b3;
 }

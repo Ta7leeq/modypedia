@@ -37,7 +37,7 @@ Item Details!
         <form action="" method="post" id="action-form">
             {% csrf_token %}
             <div class="buttons">
-                <button type="button" name="play" value="{{ item.id }}" class="play-btn" onclick="playAudio('{{ item.id }}')">
+                <button type="button" name="play" value="" class="play-btn" onclick="playAudio('')">
                     <span>&#9654;</span> Play
                 </button>
                 <button type="submit" name="delete" value="{{ item.id }}" class="delete-btn" onclick="return confirmDelete();">

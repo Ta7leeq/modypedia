@@ -25,6 +25,7 @@ All Items!
         {{ form.as_p }}
         <button type="submit">Filter</button>
     </form>
+    
     <h2>Items</h2>
     <ul>
         {% for item in items %}
@@ -32,6 +33,8 @@ All Items!
                 <a href="">{{ item.title }}</a>
                 - {{ item.item_type }}
                 - {{ item.author }}
+                - {{ item.domain }}
+                - {{ item.field }}
                 - {{ item.date_created }}
                 - {{ item.tags }}
                 - <a href="{{ item.link }}">{{ item.link }}</a>

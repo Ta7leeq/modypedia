@@ -84,6 +84,8 @@ class Item(models.Model):
         ('Task', 'Task'),
         ('Presentation', 'Presentation'),
         ('Research Paper', 'Research Paper'),
+        ('Place', 'Place'),
+        ('Post', 'Post'),
         ('Journal Entry', 'Journal Entry'),
         ('Report', 'Report'),
         ('Manual', 'Manual'),
@@ -176,7 +178,7 @@ class Item(models.Model):
 
 
     item_type = models.CharField(max_length=50, choices=ITEM_TYPES)
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=2000)
     content = models.TextField(blank=True, null=True)
     author = models.CharField(max_length=255, blank=True, null=True,default="Mody")
     fPlatform = models.ForeignKey(Platform, on_delete=models.CASCADE, blank=True, null=True)
@@ -196,8 +198,11 @@ class Item(models.Model):
 
     tags = models.CharField(max_length=255, blank=True, null=True)
     link = models.URLField(blank=True, null=True)
+    init_time  =  models.DateField(null=True, blank=True)
     last_time  = models.DateField(null=True, blank=True)
     next_time  = models.DateField(null=True, blank=True)
+    
+    hide_time = models.CharField(max_length=255, blank=True, null=True)
     
     #additional_info = JSONField(blank=True, null=True)
 
