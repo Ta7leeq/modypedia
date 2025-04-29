@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+
+{%block css_files%}
+<link rel="stylesheet" href="{% static 'interface/style.css' %}">
+{%endblock%}
+
+{%block page_title%}
+Test Items!
+{%endblock%}
+
+{% block content %}
+<body>
+    <div class="container">
+        
+
+        
+
+        <!-- Section Title -->
+        
+        <h2 class="section-title">Test ({{ items|length }})</h2>
+
+        <!-- Items List -->
+        <ul class="items-list">
+            {% for item in items %}
+            <li class="item">
+                <form action="" method="post" class="item-form">
+                    {% csrf_token %}
+                    <div class="item-form">
+                        <div class="item-number">#{{ forloop.counter }}</div>
+                        
+                        <!-- Item Title -->
+                        <a href="{% url 'details' item.id %}" class="item-title">{{ item.title }}</a>
+
+                        <!-- Toggle Button -->
+                        <button type="button" class="btn-show-content" onclick="this.nextElementSibling.style.visibility = 'visible'">
+                            Show Answer
+                        </button>
+
+                        <!-- Item Details -->
+                        
+                        <pre class="item-content">{{ item.content }}</pre>
+                        
+                        <span class="item-tags">{{ item.tags|linebreaksbr }}</span>
+
+                        
+                        <a href="{{ item.link }}" class="item-link">{{ item.link }}</a>
+                    </div>
+
+                    <!-- action Button -->
+                    
+                    
+                    <button name="reset" value="{{item.id}}" class="btn-reset"  onclick="return confirmReset();">reset</button>
+                    
+                    
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+
+<!-- JavaScript for Confirmation Prompt -->
+<script>
+    function confirmReset() {
+        return confirm("Are you sure you want to RESET this item?");
+    }
+    
+</script>
+
+{%endblock%}
+
+
+
+

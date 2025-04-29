@@ -3,12 +3,12 @@ from .models import Item, Tag, ItemTag, Relationship,Domain,Field,Branch,Area,To
 
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ('title', 'item_type', 'author', 'date_created')
+    list_display = ('domain','field','title', 'item_type', 'author', 'date_created','next_time')
     search_fields = ('title', 'author', 'tags')
-    list_filter = ('item_type', 'date_created')
+    list_filter = ('domain','field','branch','item_type', 'date_created','next_time')
     fieldsets = (
         (None, {
-            'fields': ('item_type', 'title', 'content', 'author','fPlatform','domain','field','branch','area','topic','section','aspect','tags','link','last_time','next_time')
+            'fields': ('item_type', 'title', 'content', 'author','fPlatform','domain','field','branch','area','topic','section','aspect','tags','link','init_time','last_time','next_time','hide_time')
         }),
         ('Dates', {
             'fields': ('date_created',),

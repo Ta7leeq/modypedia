@@ -22,20 +22,30 @@ Todays Items!
         </form>
 
         <!-- Section Title -->
-        <h2 class="section-title">Today's Items</h2>
+        <h2 class="section-title">Today's Items ({{ items|length }})</h2>
+
+        
 
         <!-- Items List -->
         <ul class="items-list">
             {% for item in items %}
+            
             <li class="item">
                 <form action="" method="post" class="item-form">
                     {% csrf_token %}
-                    <div class="item-content">
+                    <div class="item-form">
                         <!-- Item Title -->
                         <a href="{% url 'details' item.id %}" class="item-title">{{ item.title }}</a>
 
+                        <!-- Toggle Button -->
+                        <button type="button" class="btn-show-content" onclick="this.nextElementSibling.style.visibility = 'visible'">
+                            Show Answer
+                        </button>
                         <!-- Item Details -->
-                        <span class="item-content">{{ item.content }}</span>
+                        
+                        <pre class="item-content">{{ item.content }}</pre>
+                        
+                        <span class="item-tags">{{ item.tags|linebreaksbr }}</span>
 
                         
                         <a href="{{ item.link }}" class="item-link">{{ item.link }}</a>
@@ -43,7 +53,10 @@ Todays Items!
 
                     <!-- action Button -->
                     <button name="done" value="{{item.id}}" class="btn-done">Done</button>
+                    <button name="hide_20" value="{{item.id}}" class="btn-hide20">Hide20</button>
+                    <button name="hide_360" value="{{item.id}}" class="btn-hide360">Hide360</button>
                     <button name="reset" value="{{item.id}}" class="btn-reset">reset</button>
+                    <button name="archive" value="{{item.id}}" class="btn-archive">archive</button>
                     <button name="delete" value="{{item.id}}" class="btn-delete"  onclick="return confirmDelete();">delete</button>
                     
                 </form>
