@@ -1,14 +1,27 @@
-from interface.models import Item
-from django.db.models import Q
+import os
+import django
 
-search_text = "Vermögensschäden"
+# Setup Django environment
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "modypedia.settings")
+django.setup()
 
-items = Item.objects.filter(Q(content__icontains=search_text))
+from interface.models import Item, Field
 
-print("Total items found:", items.count())
+# Get the field (case-insensitive)
+field_obj = Field.objects.filter(field_name__iexact="Fachkundeprüfung").first()
+
+if not field_obj:
+    print("❌ Field 'Fachkundeprüfung' not found!")
+    exit()
+
+# Filter items with this field
+items = Item.objects.filter(field=field_obj)
+
+print("🔧 Found", items.count(), "items. Setting next_time = None...")
+
+# Update each item's next_time to None
 for item in items:
-    branch_name = item.branch.branch_name if item.branch else "No Branch"
-    print("Branch:", repr(branch_name))
-    print("titel:", repr(item.title))
-    print("Content:", repr(item.content))
-    print("-" * 40)
+    item.next_time = None
+    item.save()
+
+print("✅ next_time successfully set to None for all matching items.")

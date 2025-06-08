@@ -2,7 +2,7 @@
 {% load static %}
 
 {%block css_files%}
-<link rel="stylesheet" href="{% static 'interface/details_style.css' %}">
+<link rel="stylesheet" href="{% static 'interface/style.css' %}">
 {%endblock%}
 
 {%block page_title%}
@@ -20,7 +20,10 @@ Item Details!
         </div>
         <div class="field">
             <label>Content:</label>
-            <div class="value">{{ item.content }}</div>
+            <button type="button" class="btn-show-content" onclick="this.nextElementSibling.style.visibility = 'visible'">
+                Show Answer
+            </button>
+            <pre class="item-content">{{ item.content }}</pre>
         </div>
         <div class="field">
             <label>Author:</label>
