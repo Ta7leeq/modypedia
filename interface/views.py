@@ -132,7 +132,7 @@ def memory(request):
         elif 'archive'in request.POST :
             post_id=request.POST.get('archive')
             done_item = Item.objects.get(id=post_id)
-            done_item.next_time=datetime.now() + timedelta(days=90)
+            done_item.next_time=None
             done_item.save()
             print("archive")
         
@@ -212,7 +212,7 @@ def new(request):
         elif 'archive' in request.POST:
             post_id=request.POST.get('archive')
             done_item = Item.objects.get(id=post_id)
-            done_item.next_time=datetime.now() + timedelta(days=90)
+            done_item.next_time=None
             done_item.save()
             print("archive")
         
@@ -316,7 +316,7 @@ def reset(request):
         elif 'archive' in request.POST:
             post_id=request.POST.get('archive')
             done_item = Item.objects.get(id=post_id)
-            done_item.next_time=datetime.now() + timedelta(days=90)
+            done_item.next_time=None
             done_item.save()
             print("archive")
         
@@ -420,7 +420,7 @@ def task(request):
         elif 'archive'in request.POST:
             post_id=request.POST.get('archive')
             done_item = Item.objects.get(id=post_id)
-            done_item.next_time=datetime.now() + timedelta(days=90)
+            done_item.next_time=None
             done_item.save()
 
         elif 'postpone' in request.POST:
@@ -479,7 +479,7 @@ def test(request):
         elif 'archive'in request.POST :
             post_id=request.POST.get('archive')
             done_item = Item.objects.get(id=post_id)
-            done_item.next_time=datetime.now() + timedelta(days=90)
+            done_item.next_time=None
             done_item.save()
             print("archive")
         

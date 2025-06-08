@@ -2,7 +2,7 @@
 {%load static%}
 
 {%block css_files%}
-    <link rel="stylesheet" href ="{%static "interface/style.css" %}"-->
+    <link rel="stylesheet" href="{% static 'interface/style.css' %}">
 {%endblock%}
 
 
@@ -30,7 +30,7 @@ All Items!
     <ul>
         {% for item in items %}
             <li>
-                <a href="">{{ item.title }}</a>
+                <a href="{% url 'details' item.id %}">{{ item.title }}</a>
                 - {{ item.item_type }}
                 - {{ item.author }}
                 - {{ item.domain }}
