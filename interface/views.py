@@ -18,9 +18,15 @@ import os
 import openai
 import json
 
-from interface.models import Domain, Field, Branch
 
-openai.api_key = os.environ.get("OPENAI_API_KEY")
+from interface.models import Domain, Field, Branch
+load_dotenv()  # Load variables from .env
+
+
+print("KEY:", os.environ.get("OPENAI_API_KEY"))
+
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+
 
 def item_list(request):
     form = ItemFilterForm(request.GET)
