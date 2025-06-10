@@ -1,50 +1,110 @@
 {% extends "base.html" %}
-{%load static%}
+{% load static %}
 
-{%block css_files%}
-    <link rel="stylesheet" href="{% static 'interface/style.css' %}">
-{%endblock%}
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'interface/home.css' %}">
+{% endblock %}
 
-
-{%block page_title%}
+{% block page_title %}
 All Items!
-{%endblock%}
-
-
+{% endblock %}
 
 {% block content %}
-<head>
-    <meta charset="UTF-8">
-    <title>Item List</title>
-    <link rel="stylesheet" href="{% static 'interface/style.css' %}">
+<div class="container mt-5">
 
-</head>
-<body>
-    <h1>Filter Items</h1>
-    <form method="get">
-        {{ form.as_p }}
-        <button type="submit">Filter</button>
-    </form>
+
+
+    <h2 class="mb-3">Add Item</h2>
     
-    <h2>Items</h2>
-    <ul>
+    <form method="post" class="add-item-form mb-5 p-3 rounded shadow-sm bg-light">
+    {% csrf_token %}
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label for="item_type" class="form-label">Type</label>
+                <select name="item_type" id="item_type" class="form-select" required>
+                    
+                    <option value="Video">Video</option>
+                    <option value="Article">Article</option>
+                    <option value="Book">Book</option>
+                    <option value="Quote">Quote</option>
+                    <option value="Tweet">Tweet</option>
+                    <option value="Equation">Equation</option>
+                    <option value="Code">Code</option>
+                    <option value="Task">Task</option>
+                    <option value="Place">Place</option>
+                    <option value="Diagram">Diagram</option>
+                    <option value="Image">Image</option>
+                    <option value="Note">Note</option>
+                    <option value="Email">Email</option>
+                    <option value="Blueprint">Blueprint</option>
+                    <option value="Map">Map</option>
+                    <option value="Flowchart">Flowchart</option>
+                    <option value="Checklist">Checklist</option>
+                    <option value="Recipe">Recipe</option>
+                    <option value="Guideline">Guideline</option>
+                    
+
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" name="title" id="title" class="form-control">
+            </div>
+            <div class="col-md-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea name="description" id="description" rows="2" class="form-control" required></textarea>
+            </div>
+            <div class="col-md-2">
+                <label for="link" class="form-label">Link</label>
+                <input type="url" name="link" id="link" class="form-control">
+            </div>
+            <div class="col-md-1 d-grid">
+                <label class="form-label invisible">Submit</label>
+                <button type="submit" name="add" value="1" class="btn btn-success">Add</button>
+            </div>
+        </div>
+    </form>
+
+
+    <h1 class="mb-4">Filter Items</h1>
+
+    <form method="get" class="filter-form d-flex flex-wrap gap-2 align-items-end mb-4 p-3 rounded shadow-sm bg-light">
+    {% for field in form.visible_fields %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}" class="form-label mb-1">{{ field.label }}</label>
+            {{ field }}
+        </div>
+    {% endfor %}
+    <div class="form-group">
+        <label class="form-label invisible">Filter</label>
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </div>
+    </form>
+
+
+
+    
+    <h2 class="mb-3">Items ({{ count }})</h2>
+
+    <ul class="custom-item-list">
         {% for item in items %}
-            <li>
-                <a href="{% url 'details' item.id %}">{{ item.title }}</a>
-                - {{ item.item_type }}
-                - {{ item.author }}
-                - {{ item.domain }}
-                - {{ item.field }}
-                - {{ item.date_created }}
-                - {{ item.tags }}
-                - <a href="{{ item.link }}">{{ item.link }}</a>
-            </li>
+        <li class="custom-item-entry">
+            <a href="{% url 'details' item.id %}" class="item-title-link">{{ item.title }}</a>
+            <div class="item-meta">
+                Type: {{ item.item_type }} |
+                Author: {{ item.author }} |
+                Domain: {{ item.domain }} |
+                Field: {{ item.field }} |
+                Date: {{ item.date_created }} |
+                Tags: {{ item.tags }} |
+                <a href="{{ item.link }}" target="_blank">Visit</a>
+            </div>
+        </li>
+        {% empty %}
+        <li class="custom-item-entry">
+            No items found.
+        </li>
         {% endfor %}
     </ul>
-</body>
-</html>
-{%endblock%}
-
-
-
-    
+</div>
+{% endblock %}
