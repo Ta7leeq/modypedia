@@ -11,10 +11,39 @@ import os
 from google.cloud import texttospeech
 from django.db.models import Q,F
 import time
+from openai import OpenAI
+
+from dotenv import load_dotenv
+import os
+import openai
+import json
+
+from interface.models import Domain, Field, Branch
+
+openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 def item_list(request):
     form = ItemFilterForm(request.GET)
     items = Item.objects.all()
+    count =  items.count()
+    
+    if request.method == "POST" and request.POST.get("add") == "1":
+        post_type = request.POST.get("item_type")
+        
+        title = request.POST.get("title")
+        description = request.POST.get("description")
+        link = request.POST.get("link")
+        domains=Domain.objects.all()
+        fields=Field.objects.all()
+        branches=Branch.objects.all()
+        
+        gpt_classifiction=ask_chatgpt(title,description,link,domains,fields,branches)
+        store_post(post_type, gpt_classifiction["title"], gpt_classifiction["description"], gpt_classifiction["platform"],link, gpt_classifiction["domain"], gpt_classifiction["field"], gpt_classifiction["branch"], author="Mody")
+        #print(gpt_classifiction["platform"])
+        print(gpt_classifiction)
+        
+        
+       
 
     if form.is_valid():
         if form.cleaned_data['item_type']:
@@ -34,7 +63,7 @@ def item_list(request):
             for tag in tags:
                 items = items.filter(tags__icontains=tag.strip())
 
-    return render(request, 'interface/item_list.html', {'form': form, 'items': items})
+    return render(request, 'interface/item_list.html', {'form': form, 'items': items,'count':count})
 
 
 
@@ -59,12 +88,13 @@ def details(request,item_id):
         
         elif 'done' in request.POST:
             post_id=request.POST.get('done')
+            
             done_item = Item.objects.get(id=post_id)
             if done_item.next_time==done_item.last_time:
                 done_item.last_time=datetime.now()
                 done_item.next_time=datetime.now() + timedelta(days=1)
                 done_item.save()
-            
+
             else:
                 
                 
@@ -575,3 +605,144 @@ def get_items_with_calculations(field_name="Fachkundeprüfung"):
             filtered.append(item)
 
     return filtered
+
+
+
+def ask_chatgpt(title,description,link,domains,fields,branches):
+    
+    full_prompt = f"""
+            You are a smart classification assistant.
+            You will receive a post description and sometimes a link.
+            Do not open the link.
+            Detect the platform from the link if present.
+            Use the provided lists of Domains, Fields, and Branches to classify the content.
+            If no exact match is found in any category, suggest a new one instead.
+            If no title is given, generate a clear, relevant title from the content.
+            Dont use domain General
+            The domain should be always the wider category
+            then it goes narrower to the field and narrower to the domain
+            If you can not find out the platform from the link! you keep it none! 
+
+            ❗️Return ONLY a raw JSON object. Do NOT use markdown, backticks, or any explanation.
+
+            Format:
+            {{
+            "title": "...",
+            "description": "...",
+            "platform": "...",
+            "domain": "...",
+            "field": "...",
+            "branch": "..."
+            }}
+          
+            {title}
+
+            description:
+            {description}
+
+            link:
+            {link}
+
+            Domains:
+            {domains}
+
+            Fields:
+            {fields}
+
+            Branches:
+            {branches}
+        """
+
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[
+            {"role": "system", "content": "You are a classification engine."},
+            {"role": "user", "content": full_prompt}
+        ]
+    
+    )
+    #raw = response.choices[0].message.content.strip("` \n")
+    #raw = response.choices[0].message.content
+    #print("RAW RESPONSE:")
+    #print(repr(raw))   
+    #json_data = json.loads(raw)
+    json_data=parse_response_to_json(response.choices[0].message.content)
+
+    return json_data
+    #return "none"
+
+
+
+from datetime import date
+import time
+from interface.models import Item, Domain, Field, Platform
+
+
+def parse_response_to_json(response_text):
+    """
+    Cleans and converts a string response into a valid JSON object.
+    - Strips markdown wrappers (like ```json)
+    - Handles malformed spacing or newline issues
+    - Raises informative errors if parsing fails
+    """
+    try:
+        # Remove markdown wrappers like ```json or ``` if present
+        cleaned = re.sub(r"^```(?:json)?|```$", "", response_text.strip(), flags=re.MULTILINE).strip()
+
+        # Try to parse
+        #print("parced successuflly")
+        return json.loads(cleaned)
+
+    except json.JSONDecodeError as e:
+        print("❌ JSON decoding failed. Check format.")
+        print("Raw input received:")
+        print(repr(response_text))
+        print(f"Error details: {e}")
+        return None
+
+def store_post(post_type,title,description,platform_name, link, domain_name, field_name, branch_name, author="Mody"):
+    try:
+        # Lookups
+        platform, _ = Platform.objects.get_or_create(platform_name=platform_name)
+        domain, _ = Domain.objects.get_or_create(domain_name=domain_name)
+        field, _ = Field.objects.get_or_create(field_name=field_name)
+        branch, _ = Branch.objects.get_or_create(branch_name=branch_name)
+
+        
+
+        # Timestamps
+        today_date = date.today()
+        today_timestamp = str(int(time.time()))
+
+        # Title & Content
+        title = title
+        content = description
+
+        # Create item
+        Item.objects.create(
+            item_type=post_type,
+            title=title,
+            content=content,
+            author=author,
+            fPlatform=platform,
+            platform=platform_name,
+            
+            domain=domain,
+            field=field,
+            branch=branch,
+            link=link,
+            init_time=today_date,
+            last_time=today_date,
+            next_time=today_date,
+            hide_time=today_timestamp
+        )
+
+        print(f"✅ {platform_name} post stored successfully.")
+        return True
+
+    except (Domain.DoesNotExist, Field.DoesNotExist, Platform.DoesNotExist) as e:
+        print(f"❌ Lookup failed: {e}")
+        return False
+    
+
+    

@@ -1,0 +1,111 @@
+/* === GENERAL === */
+body {
+    background-color: #f6f3ee; /* warm beige */
+    color: #2f2f2f;
+    font-family: system-ui, sans-serif;
+}
+
+/* === ADD ITEM FORM === */
+.add-item-form {
+    border: 1px solid #d3cfc7;
+    background-color: #fefaf3; /* light cream */
+    border-radius: 8px;
+}
+
+.add-item-form .form-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #2a2a2a;
+}
+
+.add-item-form input,
+.add-item-form textarea {
+    font-size: 0.9rem;
+    padding: 6px 10px;
+    border: 1px solid #ccc7b9;
+    border-radius: 4px;
+    background-color: #f8f5eb;
+    color: #333;
+}
+
+/* === FILTER FORM === */
+.filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 16px;
+    padding: 16px;
+    margin-bottom: 30px;
+    border: 1px solid #d6d3c8;
+    background-color: #fdf9f1; /* warmer beige */
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.filter-form .form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-form .form-label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+    color: #3b3b3b;
+}
+
+.filter-form select,
+.filter-form input {
+    min-width: 160px;
+    font-size: 0.9rem;
+    padding: 6px 10px;
+    border: 1px solid #cfc9ae;
+    border-radius: 4px;
+    background-color: #f8f5e4; /* soft yellow-beige */
+    color: #2e2e2e;
+}
+
+.filter-form button {
+    height: 38px;
+    font-size: 0.9rem;
+    padding: 6px 16px;
+}
+
+/* === ITEM LIST === */
+.custom-item-list {
+    margin-top: 30px;
+    padding: 0;
+    list-style: none;
+}
+
+.custom-item-entry {
+    background-color: #fcf8ef;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #d9d4c6;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    transition: background-color 0.2s ease-in-out;
+}
+
+.custom-item-entry:hover {
+    background-color: #f0e9d6;
+}
+
+.item-title-link {
+    text-decoration: none;
+    color: #556b2f; /* olive green */
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.item-title-link:hover {
+    text-decoration: underline;
+}
+
+.item-meta {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #4e4e4e;
+    line-height: 1.4;
+}
