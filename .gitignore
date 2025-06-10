@@ -1,2 +1,16 @@
+
+# Ignore environment files
+.env
+.env.*
+
+# Ignore Django settings (modify path as needed)
+*/settings.py
+*/settings/local.py
+
+# Ignore IDE files
+.idea/
+.vscode/
+
+# Ignore Python cache
 __pycache__/
 *.pyc
