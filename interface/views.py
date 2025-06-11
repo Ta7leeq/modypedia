@@ -31,7 +31,7 @@ client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 def item_list(request):
     form = ItemFilterForm(request.GET)
     items = Item.objects.all()
-    count =  items.count()
+    
     
     if request.method == "POST" and request.POST.get("add") == "1":
         post_type = request.POST.get("item_type")
@@ -52,22 +52,38 @@ def item_list(request):
        
 
     if form.is_valid():
-        if form.cleaned_data['item_type']:
-            items = items.filter(item_type=form.cleaned_data['item_type'])
-        if form.cleaned_data['title']:
-            items = items.filter(title__icontains=form.cleaned_data['title'])
-        
-        if form.cleaned_data['domain']:
-            items = items.filter(title__icontains=form.cleaned_data['domain'])
+        cd = form.cleaned_data  # shorthand
 
-        if form.cleaned_data['date_created_from']:
-            items = items.filter(date_created__gte=form.cleaned_data['date_created_from'])
-        if form.cleaned_data['date_created_to']:
-            items = items.filter(date_created__lte=form.cleaned_data['date_created_to'])
-        if form.cleaned_data['tags']:
-            tags = form.cleaned_data['tags'].split(',')
+        if cd['item_type']:
+            items = items.filter(item_type=cd['item_type'])
+
+        if cd['title']:
+            items = items.filter(title__icontains=cd['title'])
+
+        if cd['author']:
+            items = items.filter(author=cd['author'])  # FK match
+
+        if cd['domain']:
+            items = items.filter(domain=cd['domain'])  # FK match
+
+        if cd['field']:
+            items = items.filter(field=cd['field'])  # FK match
+
+        if cd['branch']:
+            items = items.filter(branch=cd['branch'])  # FK match
+
+        if cd['date_created_from']:
+            items = items.filter(date_created__gte=cd['date_created_from'])
+
+        if cd['date_created_to']:
+            items = items.filter(date_created__lte=cd['date_created_to'])
+
+        if cd['tags']:
+            tags = [tag.strip() for tag in cd['tags'].split(',')]
             for tag in tags:
-                items = items.filter(tags__icontains=tag.strip())
+                items = items.filter(tags__icontains=tag)
+
+    count =  items.count()
 
     return render(request, 'interface/item_list.html', {'form': form, 'items': items,'count':count})
 
